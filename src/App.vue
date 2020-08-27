@@ -1,18 +1,35 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div id="app">
+        <Form @mazeData="createMaze" @regenerateMaze="regenerateMaze" :solution="solution"/>
+        <Maze v-if="showMaze" :mazeData="mazeData" @solution="setSolution"/>
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Form from "./components/Form";
+import Maze from "./components/Maze";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    name: 'App',
+    components: { Form, Maze },
+    data: () => ({
+        mazeData: {},
+        showMaze: false,
+        solution: null
+    }),
+    methods: {
+        createMaze(data) {
+            if (!Object.keys(this.mazeData).length) this.mazeData = {...data};
+            this.showMaze = true;
+        },
+        regenerateMaze() {
+            this.showMaze = false;
+            setTimeout(()=> this.createMaze(), 0);
+        },
+        setSolution(sol) {
+            this.solution = sol;
+        }
+    }
 }
 </script>
 
@@ -24,5 +41,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
+    display: flex;
 }
 </style>
